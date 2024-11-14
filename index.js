@@ -25,8 +25,22 @@ GET /todos - Retrieve all to-do items or filter by completed status.
 after completing this part, you need to comment out the GET end point 
 already implemented here to test this new GET endpoint! 
 */
+app.post('/todos', (req, res) => {
+  const newTodo = {
+    id: todos.length + 1,
+    task: req.body.task,
+    completed: false
+  };
+  todos.push(201).json(newTodo);
+});
 
-
+/* SAMPLE DATA?
+let todos = [
+{ id: 1, task: "Learn Node.js"
+{ id: 2, task: "Build a REST API"
+, completed: false },
+, completed: false }
+]; */
 
 // POST /todos - Add a new to-do item
 app.post('/todos', (req, res) => {
@@ -57,6 +71,18 @@ example usage:
 curl -X PUT http://localhost:3000/todos/complete-all
 */
 
+// PUT /todos/complete-all - Mark all to-do items as completed
+app.put('/todos/complete-all', (req, res) => {
+  // todos.map() iterates todos array
+  // creates new object with copy of todo
+  // ... is "spread operator" - it expands arrays into single elements
+  // each element will individually set to completed 'true'
+  todos = todos.map(todo => ({ ...todo, completed: true }));
+  
+  // status 200 = success
+  // .json(todos) updates todos array back to my client
+  res.status(200).json(todos);
+});
 
 // DELETE /todos/:id - Delete a to-do item
 app.delete('/todos/:id', (req, res) => {
