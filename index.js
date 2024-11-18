@@ -5,8 +5,6 @@ const port = 3000;
 // Middleware to parse JSON bodies
 app.use(express.json());
 
-
-// Question 1: Add a "Priority" Field to the To-Do API
 // Sample data
 let todos = [
   { id: 1, task: "Learn Node.js", completed: false, priority: "medium" },
@@ -18,7 +16,7 @@ app.get('/todos', (req, res) => {
   //  extracting completed property from req.query object
   const { completed } = req.query;
 
-  if (completed !== undefied) {
+  if (completed !== undefined) {
     const filteredTodos = todos.filter(todo => todo.completed.toString() === completed);
     return res.json(filteredTodos);
   }
@@ -36,22 +34,11 @@ app.post('/todos', (req, res) => {
     id: todos.length + 1,
     task: req.body.task,
     completed: false,
-    priority: medium
-  };
-  todos.push(201).json(newTodo);
-});
-
-/*
-// POST /todos - Add a new to-do item
-app.post('/todos', (req, res) => {
-  const newTodo = {
-    id: todos.length + 1,
-    task: req.body.task,
-    completed: false
+    priority: "medium"
   };
   todos.push(newTodo);
   res.status(201).json(newTodo);
-}); */
+});
 
 // PUT /todos/:id - Update an existing to-do item
 app.put('/todos/:id', (req, res) => {
@@ -65,18 +52,9 @@ app.put('/todos/:id', (req, res) => {
   res.json(todo);
 });
 
-
-
 // PUT /todos/complete-all - Mark all to-do items as completed
 app.put('/todos/complete-all', (req, res) => {
-  // todos.map() iterates todos array
-  // creates new object with copy of todo
-  // ... is "spread operator" - it expands arrays into single elements
-  // each element will individually set to completed 'true'
   todos = todos.map(todo => ({ ...todo, completed: true }));
-  
-  // status 200 = success
-  // .json(todos) updates todos array back to my client
   res.status(200).json(todos);
 });
 
