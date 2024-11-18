@@ -9,39 +9,39 @@ app.use(express.json());
 // Question 1: Add a "Priority" Field to the To-Do API
 // Sample data
 let todos = [
-  { id: 1, task: "Learn Node.js", completed: false },
-  { id: 2, task: "Build a REST API", completed: false }
+  { id: 1, task: "Learn Node.js", completed: false, priority: "medium" },
+  { id: 2, task: "Build a REST API", completed: false, priority: "medium" }
 ];
 
 // GET /todos - Retrieve all to-do items
 app.get('/todos', (req, res) => {
+  //  extracting completed property from req.query object
+  const { completed } = req.query;
+
+  if (completed !== undefied) {
+    const filteredTodos = todos.filter(todo => todo.completed.toString() === completed);
+    return res.json(filteredTodos);
+  }
   res.json(todos);
 });
 
+// Add this route to handle the root URL
+app.get('/', (req, res) => {
+  res.send('Welcome to the To-Do API!');
+});
 
-/* 
-Q.3"
-GET /todos - Retrieve all to-do items or filter by completed status.
-after completing this part, you need to comment out the GET end point 
-already implemented here to test this new GET endpoint! 
-*/
+// POST /todos - Add new to-do item
 app.post('/todos', (req, res) => {
   const newTodo = {
     id: todos.length + 1,
     task: req.body.task,
-    completed: false
+    completed: false,
+    priority: medium
   };
   todos.push(201).json(newTodo);
 });
 
-/* SAMPLE DATA?
-let todos = [
-{ id: 1, task: "Learn Node.js"
-{ id: 2, task: "Build a REST API"
-, completed: false },
-, completed: false }
-]; */
-
+/*
 // POST /todos - Add a new to-do item
 app.post('/todos', (req, res) => {
   const newTodo = {
@@ -51,7 +51,7 @@ app.post('/todos', (req, res) => {
   };
   todos.push(newTodo);
   res.status(201).json(newTodo);
-});
+}); */
 
 // PUT /todos/:id - Update an existing to-do item
 app.put('/todos/:id', (req, res) => {
@@ -65,11 +65,7 @@ app.put('/todos/:id', (req, res) => {
   res.json(todo);
 });
 
-/*
-Question 2: Implement a "Complete All" Endpoint
-example usage: 
-curl -X PUT http://localhost:3000/todos/complete-all
-*/
+
 
 // PUT /todos/complete-all - Mark all to-do items as completed
 app.put('/todos/complete-all', (req, res) => {
